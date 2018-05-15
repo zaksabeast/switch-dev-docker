@@ -1,43 +1,34 @@
-# Use Ubuntu
-FROM ubuntu:18.04
+# Use minideb base
+FROM bitnami/minideb
+
+# Set Environment Variables
+ENV WORKDIR /app
+ENV DEVKITPRO /opt/devkitpro
+ENV DEVKITA64 ${DEVKITPRO}/devkitA64
+ENV DEVKITARM ${DEVKITPRO}/devkitARM
+ENV PATH=${PATH}:${DEVKITA64}/bin:${DEVKITARM}/bin
 
 # Setup workdir
-ENV WORKDIR /app
 WORKDIR ${WORKDIR}
 
 # Install dependencies
-RUN apt-get update
-RUN apt-get install sudo git curl wget xz-utils build-essential -y
-
-# Set Environment Variables
-ENV DEVKITPRO /opt/devkitpro
-ENV DEVKITA64 /opt/devkitpro/devkitA64
-ENV DEVKITARM /opt/devkitpro/devkitARM
+RUN apt-get update \
+  && apt install git curl xz-utils bzip2 make -y
 
 # Install devkitA64
-RUN curl -L https://raw.githubusercontent.com/devkitPro/installer/master/perl/devkitA64update.pl -o devkitA64update.pl
-RUN chmod +x ./devkitA64update.pl
-RUN ./devkitA64update.pl
-
+RUN mkdir -p ${DEVKITA64} ${DEVKITARM} \
+  && curl -L https://downloads.devkitpro.org/devkitA64_a7-x86_64-linux.tar.xz -o ${WORKDIR}/devkitA64.tar.xz \
+  && tar xC ${DEVKITPRO} -f ${WORKDIR}/devkitA64.tar.xz \
 # Install devkitARM
-RUN curl -L https://raw.githubusercontent.com/devkitPro/installer/master/perl/devkitARMupdate.pl -o devkitARMupdate.pl
-RUN chmod +x ./devkitARMupdate.pl
-RUN ./devkitARMupdate.pl
+  && curl -L https://downloads.devkitpro.org/devkitARM_r47-x86_64-linux.tar.bz2 -o ${WORKDIR}/devkitARM.tar.bz2 \
+  && tar xjC ${DEVKITPRO} -f ${WORKDIR}/devkitARM.tar.bz2 \
+# Cleanup
+  && rm -rf ${WORKDIR}/* ${DEVKITPRO}/examples
 
 # Install latest libnx
-RUN rm -rf /opt/devkitpro/libnx
-RUN git clone https://github.com/switchbrew/libnx.git ${WORKDIR}/libnx
-RUN cd ${WORKDIR}/libnx && make && make install
-
+RUN git clone https://github.com/switchbrew/libnx.git ${WORKDIR}/libnx \
+  && cd ${WORKDIR}/libnx \
+  && make \
+  && make install \
 # Cleanup
-RUN rm -rf ${WORKDIR}/*
-
-# Add non-root user
-RUN useradd switchci && echo "switchci:switchci" | chpasswd && adduser switchci sudo
-
-# Give workdir and devkitpro permissions to user
-RUN chown -R switchci:switchci ${WORKDIR}
-RUN chown -R switchci:switchci /opt/devkitpro
-
-# Switch to user
-USER switchci
+  && rm -rf ${WORKDIR}/libnx
