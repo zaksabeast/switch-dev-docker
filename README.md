@@ -7,32 +7,37 @@ _An updated development environment for the Nintendo Switch_
 - Provide a solution for continuous integration
 - Provide the latest libraries by compiling from source
 
-## Building image
+## Pulling image
 ```
-docker build -t switchci .
+docker pull zaksabeast/switchci
 ```
 
 ## Running image
 ```
-docker run -it switchci /bin/bash
+docker run -it zaksabeast/switchci /bin/bash
 ```
 
 ## Build project in current directory
 ```
-docker run -it -v "$(pwd)":/app switchci make
+docker run -it -v "$(pwd)":/app zaksabeast/switchci make
+```
+
+## Building image
+```
+docker build -t switchci .
 ```
 
 ## switchmake command
 
 Linux:
 ```
-echo alias switchmake=\'docker run -it -v '"$(pwd)"':/app switchci make\' >> ~/.bashrc
+echo alias switchmake=\'docker run -it -v '"$(pwd)"':/app zaksabeast/switchci make\' >> ~/.bashrc
 source ~/.bashrc
 ```
 
 Mac:
 ```
-echo alias switchmake=\'docker run -it -v '"$(pwd)"':/app switchci make\' >> ~/.bash_profile
+echo alias switchmake=\'docker run -it -v '"$(pwd)"':/app zaksabeast/switchci make\' >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
