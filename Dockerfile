@@ -13,7 +13,7 @@ WORKDIR ${WORKDIR}
 
 # Install dependencies
 RUN apt-get update \
-  && apt install git curl xz-utils bzip2 make -y
+  && apt install git curl xz-utils bzip2 make libxml2 -y
 
 # Install devkitA64
 RUN mkdir -p ${DEVKITA64} ${DEVKITARM} \
@@ -25,10 +25,31 @@ RUN mkdir -p ${DEVKITA64} ${DEVKITARM} \
 # Cleanup
   && rm -rf ${WORKDIR}/* ${DEVKITPRO}/examples
 
-# Install latest libnx
+# Install libnx
 RUN git clone https://github.com/switchbrew/libnx.git ${WORKDIR}/libnx \
   && cd ${WORKDIR}/libnx \
   && make \
   && make install \
-# Cleanup
-  && rm -rf ${WORKDIR}/libnx
+  && rm -rf ${WORKDIR}/libnx \
+# Install devkitpro-pacman
+  && curl -L https://github.com/devkitPro/pacman/releases/download/v1.0.0/devkitpro-pacman.deb -o ${WORKDIR}/devkitpro-pacman.deb \
+  && dpkg -i ${WORKDIR}/devkitpro-pacman.deb \
+  && rm ${WORKDIR}/devkitpro-pacman.deb \
+# Install sdl2
+  && dkp-pacman -S --noconfirm switch-sdl2 \
+# Install sdl2-image
+  switch-sdl2_image \
+# Install sdl2-mixer
+  switch-sdl2_mixer \
+# Install libjpeg-turbo
+  switch-libjpeg-turbo \
+# Install libvorbixidec
+  switch-libvorbisidec \
+# Install libogg
+  switch-libogg \
+# Install mpeg123
+  switch-mpg123 \
+# Install libmodplug
+  switch-libmodplug \
+# Install libpng
+  switch-libpng
