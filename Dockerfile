@@ -30,9 +30,10 @@ RUN git clone https://github.com/switchbrew/libnx.git ${WORKDIR}/libnx \
   && cd ${WORKDIR}/libnx \
   && make \
   && make install \
-  && rm -rf ${WORKDIR}/libnx \
+  && rm -rf ${WORKDIR}/libnx
+
 # Install devkitpro-pacman
-  && curl -L https://github.com/devkitPro/pacman/releases/download/v1.0.0/devkitpro-pacman.deb -o ${WORKDIR}/devkitpro-pacman.deb \
+RUN curl -L https://github.com/devkitPro/pacman/releases/download/v1.0.0/devkitpro-pacman.deb -o ${WORKDIR}/devkitpro-pacman.deb \
   && dpkg -i ${WORKDIR}/devkitpro-pacman.deb \
   && rm ${WORKDIR}/devkitpro-pacman.deb \
 # Install sdl2
