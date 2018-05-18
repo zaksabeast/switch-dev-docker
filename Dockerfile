@@ -41,6 +41,8 @@ RUN git clone https://github.com/switchbrew/libnx.git ${WORKDIR}/libnx \
   switch-sdl2_image \
 # Install sdl2-mixer
   switch-sdl2_mixer \
+# Install sdl2-ttf
+  switch-sdl2_ttf \
 # Install libjpeg-turbo
   switch-libjpeg-turbo \
 # Install libvorbixidec
@@ -52,4 +54,8 @@ RUN git clone https://github.com/switchbrew/libnx.git ${WORKDIR}/libnx \
 # Install libmodplug
   switch-libmodplug \
 # Install libpng
-  switch-libpng
+  switch-libpng \
+# Install freetype
+  switch-freetype \
+# Install bzip2
+  switch-bzip2
