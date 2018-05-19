@@ -59,4 +59,6 @@ RUN curl -L https://github.com/devkitPro/pacman/releases/download/v1.0.0/devkitp
 # Install freetype
   switch-freetype \
 # Install bzip2
-  switch-bzip2
+  switch-bzip2 \
+# Install switch-tools
+  switch-tools
